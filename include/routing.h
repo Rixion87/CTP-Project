@@ -50,14 +50,15 @@ public:
 
     void dump() {
         Serial.println("---Routing Table ---");
+        char buf[64];
         for (uint8_t i = 0; i < _count; i++) {
-            Serial.print(" Node 0x%04X", _table[i].nodeID);
-        
-            Serial.printInt("Hops=%d", _table[i].hopCount);
-
-            Serial.parseInt("rssi=%d", _table[i].rssi);
-        
-            Serial.println(" age=%1ums\n", _table[i].rssi, millis() - _table[i].lastSeenMs);
+            sniprintf(buf, sizeof(buf),
+                "Node 0x%04X Hops=%d rssi=%d age=%1ums", 
+                _table[i].nodeID,
+                _table[i].hopCount,
+                _table[i].rssi,
+                millis() - _table[i].lastSeenMs);
+            Serial.println(buf);
         }
     }
 
