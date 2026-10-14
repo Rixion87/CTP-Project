@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <radioMKRWAN.h>
+#include <MKRWAN.h>
 
 /*Code for transmitter*/
 
