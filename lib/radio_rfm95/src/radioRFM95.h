@@ -1,0 +1,1 @@
+/*For the MKR 1010 with the RFM95W external radio module*/

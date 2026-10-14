@@ -3,13 +3,13 @@
 
 /*Code for transmitter*/
 
-LoRAModem modem;
+LoRaModem modem;
 
 /* ABP credentials - same NwkSKey/AppSKey on both boards
   These are test-only keys, don't use in production  */
 const char* devAddr = "AABBCCDD";
 const char* nwkSKey = "00000000000000000000000000000001";
-const char* appSKey = "00000000000000000000000000000001"
+const char* appSKey = "00000000000000000000000000000001";
 
 // put function declarations here:
 int myFunction(int, int);
@@ -20,7 +20,7 @@ void setup() {
   while (!Serial);
 
   Serial.println("Initialising modem...");
-  if (!modem.begin(AU195)) {
+  if (!modem.begin(AU915)) {
     Serial.println("Modem initialisation failed - check wiring");
     while (true);
   }
@@ -37,7 +37,7 @@ void setup() {
   /* DR3 = SF9/BW125 - good balance of range and speed for AU195*/
   modem.dataRate(3);
   modem.setPort(1);   /*LoRaWAN PORT - keep consistent*/
-  modem.noConfirm();  /* unconfirmed uplink (no ACK from gateway)*/
+  //modem.noConfirm();  /* unconfirmed uplink (no ACK from gateway)*/
 
   Serial.println("Ready - transmitting every 10s");
 }
