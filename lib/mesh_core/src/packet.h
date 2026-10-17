@@ -3,9 +3,12 @@
 
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 
 #define PROTO_VERSION       1
-#define MAX_PAYLOAD_LEN     200
+#ifndef MAX_PAYLOAD_LEN
+#define MAX_PAYLOAD_LEN     200   /* nRF905 builds: -DMAX_PAYLOAD_LEN=18 so the whole frame fits in 32 bytes */
+#endif
 #define HEADER_LEN          10 /*bytes before payload*/
 #define MIC_LEN             4 /*truncated HMAC at tail*/
 
@@ -17,7 +20,8 @@ enum PacketType : uint8_t {
     PKT_ROUTE   = 0x04  /*ROUTING INFO*/
 };
 
-/* Wire Format*/
+/* In-memory packet. NOT the wire format: the MIC sits after the full payload array here,
+   but on the wire it follows the *actual* payload. mesh.h serialises/parses. */
 struct __attribute__((packed)) MeshPacket {
     uint8_t     version;        /* PROTOCOL VERSION*/
     uint8_t     type;           /*PACKET TYPE*/
@@ -29,6 +33,9 @@ struct __attribute__((packed)) MeshPacket {
     uint8_t     payload[MAX_PAYLOAD_LEN];
     uint8_t     mic[MIC_LEN];   /*MESSAGE INTEGRITY CODE (TAIL)*/
 };
+
+static_assert(offsetof(MeshPacket, payload) == HEADER_LEN, "HEADER_LEN out of sync with MeshPacket");
+static_assert(HEADER_LEN + MAX_PAYLOAD_LEN + MIC_LEN <= 255, "wire frame must fit a uint8_t length");
 
 #define BROADCAST_ADDR      0xFFFF
 #define MAX_TTL             7
