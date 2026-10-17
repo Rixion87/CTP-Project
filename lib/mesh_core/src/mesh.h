@@ -2,10 +2,11 @@
 
 
 #pragma once
+#include <stdio.h>
 #include "radioHAL.h"
 #include "packet.h"
 #include "routing.h"
-#include "seenCache.h"
+#include "SeenCache.h"
 
 class MeshNode {
     RadioHAL*       _radio;
@@ -74,7 +75,7 @@ private:
 
     void onReceive(const MeshPacket& pkt) {
         char buf[64];
-        sniprintf(buf, sizeof(buf),
+        snprintf(buf, sizeof(buf),
             "[MSG] From 0x%04X -> 0x%04X: %.*s\n",
             pkt.srcID, pkt.destID,
             pkt.payloadLen, pkt.payload);   
