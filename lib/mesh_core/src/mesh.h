@@ -1,19 +1,6 @@
 /*mesh.h*/
+/* Main header file, includes everything in mesh_core. Requiring only one include statement for radio drivers*/
 
-#pragma once
-#include <stdio.h>
-#include <string.h>
-#include <mesh_platform.h>
-#include "radioHAL.h"
-#include "packet.h"
-#include "routing.h"
-#include "SeenCache.h"
-
-
-
-
-
-/*mesh.h*/
 
 #pragma once
 #include <stdio.h>
