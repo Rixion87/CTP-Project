@@ -1,6 +1,4 @@
 /*mesh.h*/
-/* Main header file, includes everything in mesh_core. Requiring only one include statement for radio drivers*/
-
 
 #pragma once
 #include <stdio.h>
@@ -27,7 +25,7 @@ public:
     MeshNode(RadioHAL* radio, uint16_t nodeID)
         : _radio(radio), _nodeID(nodeID) {}
 
-    void begin() { _radio->begin(); }
+    bool begin() { return _radio->begin(); }
 
     /* Optional: get delivered packets instead of the default log line (used by tests). */
     void setRxCallback(MeshRxCallback cb, void* ctx = nullptr) { _rxCb = cb; _rxCtx = ctx; }
@@ -65,7 +63,7 @@ public:
         memcpy(&pkt, buf, HEADER_LEN);
         if (pkt.version != PROTO_VERSION)
             return;
-        if (pkt.payloadLen > MAX_PAYLOAD_LEN || len != HEADER_LEN + pkt.payloadLen + MIC_LEN)
+        if (pkt.payloadLen > MAX_PAYLOAD_LEN || (uint16_t)len != (uint16_t)(HEADER_LEN + pkt.payloadLen + MIC_LEN))
             return;                                   /*malformed / truncated*/
         memcpy(pkt.payload, buf + HEADER_LEN, pkt.payloadLen);
         memcpy(pkt.mic, buf + HEADER_LEN + pkt.payloadLen, MIC_LEN);
@@ -90,7 +88,7 @@ public:
         }
     }
 
-    private:
+private:
     bool transmit(const MeshPacket& pkt) {
         uint8_t wire[HEADER_LEN + MAX_PAYLOAD_LEN + MIC_LEN];
         memcpy(wire, &pkt, HEADER_LEN);

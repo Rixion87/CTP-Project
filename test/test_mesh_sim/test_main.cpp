@@ -110,9 +110,9 @@ void test_lossy_two_hop_statistics() {
 // ---- frame size / validation -------------------------------------------------------
 
 void test_nrf905_frame_limit() {
-    Sim s(2, 32); s.air.link(0, 1);
-    TEST_ASSERT_TRUE (s.node[0]->sendMessage(2, "012345678901234567"));    // 10+18+4 = 32 bytes
-    TEST_ASSERT_FALSE(s.node[0]->sendMessage(2, "0123456789012345678"));   // 33 bytes, refused
+    Sim s(2, 31); s.air.link(0, 1);                        // 32-byte nRF905 payload minus 1 length byte
+    TEST_ASSERT_TRUE (s.node[0]->sendMessage(2, "01234567890123456"));     // 10+17+4 = 31 bytes
+    TEST_ASSERT_FALSE(s.node[0]->sendMessage(2, "012345678901234567"));    // 32 bytes, refused
     s.run(50);
     TEST_ASSERT_EQUAL(1, s.inbox[1].count);
 }

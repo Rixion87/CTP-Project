@@ -1,3 +1,4 @@
+#pragma once
 #if defined(RADIO_NRF905)
     #include <radioNRF905.h>
     using Radio = RadioNRF905;
